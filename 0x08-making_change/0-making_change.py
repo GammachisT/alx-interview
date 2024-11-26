@@ -1,20 +1,17 @@
 #!/usr/bin/python3
-"""Making Change Problem"""
-
-
 def makeChange(coins, total):
-    """Determines the fewest number of coins needed
-        to meet a given amount total"""
     if total <= 0:
         return 0
+    
+    # Initialize dp array with infinity
+    dp = [float('inf')] * (total + 1)
+    dp[0] = 0  # 0 coins needed to make amount 0
 
-    current_total = 0
-    used_coins = 0
-    coins = sorted(coins, reverse=True)
+    # Compute the minimum coins required for each amount up to total
     for coin in coins:
-        r = (total - current_total) // coin
-        current_total += r * coin
-        used_coins += r
-        if current_total == total:
-            return used_coins
-    return -1
+        for amount in range(coin, total + 1):
+            if dp[amount - coin] != float('inf'):
+                dp[amount] = min(dp[amount], dp[amount - coin] + 1)
+
+    # If dp[total] is still infinity, we cannot make the total
+    return dp[total] if dp[total] != float('inf') else -1
