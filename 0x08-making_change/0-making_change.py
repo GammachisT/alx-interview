@@ -20,17 +20,21 @@ def makeChange(coins, total):
         return 0
 
     # Initialize a list to hold the minimum coins needed for each amount
-    min_coins = [float('inf')] * (total + 1)
-    min_coins[0] = 0  # No coins needed to make 0
+    min_coins = 0
+    temp = 0  # No coins needed to make 0
 
+    coins.sort(reverse=True)
     # Iterate through each coin
+
     for coin in coins:
-        amount = coin  # Start from the current coin value
-        while amount <= total:
+        while check < total:
+            min_coins += coin
+            temp += 1
             # Update the minimum coins needed for this amount
-            if min_coins[amount - coin] + 1 < min_coins[amount]:
-                min_coins[amount] = min_coins[amount - coin] + 1
-            amount += 1  # Move to the next amount
+            if min_coins == total:
+                return temp
+            min_coins -= coin
+            min_coins -= 1
 
     # If we can't make the total, return -1
-    return min_coins[total] if min_coins[total] != float('inf') else -1
+    return -1
